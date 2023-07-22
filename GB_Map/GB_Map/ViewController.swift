@@ -32,9 +32,11 @@ class ViewController: UIViewController {
     }
 
     private func configureLocationManager() {
-        self.locationManager = CLLocationManager()
-        self.locationManager?.requestWhenInUseAuthorization()
-        self.locationManager?.delegate = self
+        locationManager = CLLocationManager()
+        locationManager?.requestWhenInUseAuthorization()
+        locationManager?.delegate = self
+        //если приложение не активно, но данные все равно уходят (ниже)
+        //locationManager?.allowsBackgroundLocationUpdates = true
     }
     
     private func updateCurrentLocation() {
@@ -48,18 +50,23 @@ class ViewController: UIViewController {
     
     private func setupCamera(location: CLLocationCoordinate2D) {
         mapView.camera = GMSCameraPosition.camera(withTarget: location, zoom:14)
+        //моя локация
+        //mapView.isMyLocationEnabled = true
     }
     
+    // карта будет показывать центр нашей точки
     private func updateCamera(location: CLLocationCoordinate2D) {
         mapView.animate(toLocation: location)
     }
     
+    // прорисовка маркера, здесь стандартный
     private func createMark(location: CLLocationCoordinate2D) {
         let marker = GMSMarker(position: location)
         marker.map = mapView
     }
 }
 
+//просмотр координат куда мы нажали
 extension ViewController: GMSMapViewDelegate {
     func mapView(_ mapView: GMSMapView, didTapAt coordinate: CLLocationCoordinate2D) {
        print(coordinate)
